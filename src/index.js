@@ -1,6 +1,5 @@
 const express = require("express");
 require("./db/mongoose");
-const Task = require("./models/task");
 
 // Routers
 const userRouter = require("./routers/user");
@@ -17,16 +16,16 @@ app.listen(port, () => {
   console.log("Server is up on port ", port);
 });
 
-const jwt = require("jsonwebtoken");
+// const jwt = require("jsonwebtoken");
 
-const myFunction = async () => {
-  const token = jwt.sign({ _id: "abc123" }, "thisismynewcourse", {
-    expiresIn: "7 days"
-  });
-  console.log(token);
+// const myFunction = async () => {
+//   const token = jwt.sign({ _id: "abc123" }, "thisismynewcourse", {
+//     expiresIn: "7 days"
+//   });
+//   console.log(token);
 
-  const payload = jwt.verify(token, "thisismynewcourse");
-  console.log(payload);
-};
+//   const payload = jwt.verify(token, "thisismynewcourse");
+//   console.log(payload);
+// };
 
-myFunction();
+// myFunction();
