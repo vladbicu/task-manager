@@ -3,51 +3,66 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  email: {
-    type: String,
-    unique: true,
-    required: true,
-    trim: true,
-    lowercase: true,
-    validate(value) {
-      if (!validator.isEmail(value)) {
-        throw new Error("Email is not valid!");
+const Task = require("./task");
+
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    email: {
+      type: String,
+      unique: true,
+      required: true,
+      trim: true,
+      lowercase: true,
+      validate(value) {
+        if (!validator.isEmail(value)) {
+          throw new Error("Email is not valid!");
+        }
       }
-    }
-  },
-  age: {
-    type: Number,
-    default: 0,
-    validate(value) {
-      if (value < 0) {
-        throw new Error("Age must be a positive number");
+    },
+    age: {
+      type: Number,
+      default: 0,
+      validate(value) {
+        if (value < 0) {
+          throw new Error("Age must be a positive number");
+        }
       }
-    }
-  },
-  password: {
-    type: String,
-    minlength: 7,
-    trim: true,
-    validate(value) {
-      if (value.toLowerCase().includes("password")) {
-        throw new Error("Password must not contain 'password' word");
+    },
+    password: {
+      type: String,
+      minlength: 7,
+      trim: true,
+      validate(value) {
+        if (value.toLowerCase().includes("password")) {
+          throw new Error("Password must not contain 'password' word");
+        }
       }
-    }
-  },
-  tokens: [
-    {
-      token: {
-        type: String,
-        required: true
+    },
+    tokens: [
+      {
+        token: {
+          type: String,
+          required: true
+        }
       }
-    }
-  ]
+    ]
+  },
+  {
+    timestamps: true
+  }
+);
+
+// virtual property = relationship between collections
+// specify the local field and the field linked in the other collection
+userSchema.virtual("tasks", {
+  ref: "Task",
+  localField: "_id",
+  foreignField: "owner"
 });
 
 userSchema.methods.generateAuthToken = async function() {
@@ -96,6 +111,13 @@ userSchema.pre("save", async function(next) {
     user.password = await bcrypt.hash(user.password, 8);
   }
 
+  next();
+});
+
+// Delete user tasks when user is removed
+userSchema.pre("remove", async function(next) {
+  const user = this;
+  await Task.deleteMany({ owner: user._id });
   next();
 });
 

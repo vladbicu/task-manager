@@ -16,16 +16,18 @@ app.listen(port, () => {
   console.log("Server is up on port ", port);
 });
 
-// const jwt = require("jsonwebtoken");
+// const Task = require("./models/task");
+// const User = require("./models/user");
 
-// const myFunction = async () => {
-//   const token = jwt.sign({ _id: "abc123" }, "thisismynewcourse", {
-//     expiresIn: "7 days"
-//   });
-//   console.log(token);
+// const main = async () => {
+//   // const task = await Task.findById("5cfe6b9f49cb206c8409dd14");
+//   // // populate owner property of task w/ related data from Users collection
+//   // await task.populate("owner").execPopulate();
+//   // console.log(task.owner);
 
-//   const payload = jwt.verify(token, "thisismynewcourse");
-//   console.log(payload);
+//   const user = await User.findById("5cfe6aaae8a9356ba9118f8e");
+//   await user.populate("tasks").execPopulate();
+//   console.log(user.tasks);
 // };
 
-// myFunction();
+// main();
