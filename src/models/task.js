@@ -11,6 +11,14 @@ const taskSchema = new mongoose.Schema(
       type: Boolean,
       default: false
     },
+    dueDate: {
+      type: mongoose.Schema.Types.Data
+    },
+    priority: {
+      type: String,
+      enum: ["low", "medium", "high"],
+      default: "medium"
+    },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
