@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const validator = require("validator");
+const moment = require("moment");
 
 const taskSchema = new mongoose.Schema(
   {
@@ -12,7 +14,12 @@ const taskSchema = new mongoose.Schema(
       default: false
     },
     dueDate: {
-      type: mongoose.Schema.Types.Data
+      type: Number,
+      validate(value) {
+        if (!moment(value).isValid()) {
+          throw new Error("Date is not valid");
+        }
+      }
     },
     priority: {
       type: String,
