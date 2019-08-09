@@ -5,7 +5,8 @@ const config = {
   entry: "./client/index.js",
   output: {
     path: path.resolve(__dirname, "public"),
-    filename: "app.js"
+    filename: "app.js",
+    publicPath: "/"
   },
   module: {
     rules: [
@@ -20,7 +21,8 @@ const config = {
     extensions: [".js", ".jsx"]
   },
   devServer: {
-    contentBase: "./public"
+    contentBase: "./public",
+    historyApiFallback: true
   }
 };
 
